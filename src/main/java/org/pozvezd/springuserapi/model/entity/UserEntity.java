@@ -2,10 +2,7 @@ package org.pozvezd.springuserapi.model.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.type.SqlTypes;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
 
@@ -14,20 +11,22 @@ import java.util.UUID;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @JdbcTypeCode(SqlTypes.VARCHAR)
-    @Column(columnDefinition = "UUID DEFAULT get_random_uuid()", updatable = false, nullable = false)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(updatable = false, nullable = false)
     private UUID uuid;
 
     @NotBlank
     @Column(nullable = false)
     private String fio;
     private String phoneNumber;
-    private String avatarUrl;
+    private String avatar;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_uuid", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private RoleEntity role;
 
     public UUID getUuid() {
@@ -42,8 +41,8 @@ public class UserEntity {
         return phoneNumber;
     }
 
-    public String getAvatarUrl() {
-        return avatarUrl;
+    public String getAvatar() {
+        return avatar;
     }
 
     public RoleEntity getRole() {
@@ -58,8 +57,8 @@ public class UserEntity {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public void setRole(RoleEntity role) {
