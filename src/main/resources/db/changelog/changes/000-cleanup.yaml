@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 000-cleanup-database
+      author: muromtsev
+      context: dev
+      changes:
+        - sql:
+            sql: "DROP TABLE IF EXISTS users CASCADE"
+        - sql:
+            sql: "DROP TABLE IF EXISTS roles CASCADE"
+        - sql:
+            sql: "DROP TABLE IF EXISTS databasechangelog CASCADE"
+        - sql:
+            sql: "DROP TABLE IF EXISTS databasechangeloglock CASCADE"

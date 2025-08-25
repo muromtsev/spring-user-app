@@ -1,0 +1,107 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-table-roles
+      author: muromtsev
+      changes:
+        - preConditions:
+            - onFail: MARK_RAN
+            - not:
+                - tableExists:
+                    tableName: roles
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: uuid
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  defaultValueComputed: gen_random_uuid()
+              - column:
+                  name: role_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+  - changeSet:
+      id: 002-create-table-users
+      author: muromtsev
+      changes:
+        - preConditions:
+            - onFail: MARK_RAN
+            - not:
+                - tableExists:
+                    tableName: users
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: uuid
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  defaultValueComputed: gen_random_uuid()
+              - column:
+                  name: fio
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone_number
+                  type: VARCHAR(50)
+              - column:
+                  name: avatar
+                  type: TEXT
+              - column:
+                  name: role_uuid
+                  type: UUID
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: users
+            baseColumnNames: role_uuid
+            constraintName: fk_users_roles
+            referencedTableName: roles
+            referencedColumnNames: uuid
+            onDelete: CASCADE
+
+  - changeSet:
+      id: 003-insert-default-roles
+      author: muromtsev
+      changes:
+        - preConditions:
+            - onFail: MARK_RAN
+            - sqlCheck:
+                expectedResult: 0
+                sql: "SELECT COUNT(*) FROM roles WHERE role_name = 'ADMIN'"
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: role_name
+                  value: 'ADMIN'
+        - preConditions:
+            - onFail: MARK_RAN
+            - sqlCheck:
+                expectedResult: 0
+                sql: "SELECT COUNT(*) FROM roles WHERE role_name = 'USER'"
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: role_name
+                  value: 'USER'
+        - preConditions:
+            - onFail: MARK_RAN
+            - sqlCheck:
+                expectedResult: 0
+                sql: "SELECT COUNT(*) FROM roles WHERE role_name = 'MODERATOR'"
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: role_name
+                  value: 'MODERATOR'
