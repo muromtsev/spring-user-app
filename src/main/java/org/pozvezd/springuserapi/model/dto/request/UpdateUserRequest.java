@@ -15,6 +15,9 @@ public class UpdateUserRequest {
     private String avatar;
     private String roleName;
 
+    public UpdateUserRequest() {
+    }
+
     public UpdateUserRequest(UUID userUuid, String fio, String phoneNumber, String avatar, String roleName) {
         this.userUuid = userUuid;
         this.fio = fio;
@@ -25,6 +28,10 @@ public class UpdateUserRequest {
 
     public @NotNull(message = "User UUID is mandatory") UUID getUserUuid() {
         return userUuid;
+    }
+
+    public void setUserUuid(@NotNull(message = "User UUID is mandatory") UUID userUuid) {
+        this.userUuid = userUuid;
     }
 
     public String getFio() {

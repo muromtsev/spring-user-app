@@ -33,6 +33,10 @@ public class UserEntity {
         return uuid;
     }
 
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
     public @NotBlank String getFio() {
         return fio;
     }

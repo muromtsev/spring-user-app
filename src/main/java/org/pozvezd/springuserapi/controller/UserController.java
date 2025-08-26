@@ -41,7 +41,7 @@ public class UserController {
     public ResponseEntity<UserResponse> updateUserDetails(@Valid @RequestBody UpdateUserRequest updateUserRequest) {
         log.info("Received request to update user with UUID: " + updateUserRequest.getUserUuid());
         UserResponse response = userService.updateUser(updateUserRequest);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/users")

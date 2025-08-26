@@ -16,6 +16,9 @@ public class CreateUserRequest {
     @NotBlank(message = "Role is mandatory")
     private String roleName;
 
+    public CreateUserRequest() {
+    }
+
     public CreateUserRequest(String fio, String phoneNumber, String avatar, String roleName) {
         this.fio = fio;
         this.phoneNumber = phoneNumber;
